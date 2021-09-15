@@ -4,7 +4,6 @@
       <a-menu class="menu"
         theme="dark"
         mode="horizontal"
-        
         :style="{ lineHeight: '64px' }"
       >
         <a-menu-item key="1">

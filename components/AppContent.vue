@@ -1,7 +1,7 @@
 <template>
      <a-row class="table-wrapper">
       <a-col :span="14" :offset="5">
-        <a-table :columns="columns" :data-source="employees" bordered>
+        <a-table :columns="columns" :data-source="employees" bordered :pagination="{pageSize: 8}">
         <a slot="fullname" slot-scope="text">{{ text }}</a>
         <a-tag key="gender" slot="gender" :color="text === 'Male' ? `geekblue` : `volcano`"  slot-scope="text">{{ text }}</a-tag>
         <a slot="salary" slot-scope="text">{{ `${text}$` }}</a>
