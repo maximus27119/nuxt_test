@@ -31,6 +31,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/prismic',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -38,6 +39,11 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
   ],
+
+  prismic: {
+    endpoint: 'https://kozaktest.cdn.prismic.io/api/v2',
+    modern: true
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},

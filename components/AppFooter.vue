@@ -1,12 +1,27 @@
 <template>
     <a-layout-footer class="footer">
-        Ant Design ©2018 Created by Ant UED
+        {{title}}
     </a-layout-footer>
 </template>
 
 <script>
 export default {
+    data(){
+        return {
+            title: ""
+        }
+    },
+    props: {
+        id: null
+    },
+    async fetch(){
+        if(!this.id)
+            return;
 
+        const response = await this.$prismic.api.getSingle("footer");
+
+        this.title = this.$prismic.asText(response.data.footer_title)
+    }
 }
 </script>
 

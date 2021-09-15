@@ -1,87 +1,74 @@
 <template>
      <a-row class="table-wrapper">
       <a-col :span="14" :offset="5">
-        <a-table :columns="columns" :data-source="data">
-        <a slot="name" slot-scope="text">{{ text }}</a>
-        <span slot="customTitle"><a-icon type="smile-o" /> Name</span>
-        <span slot="tags" slot-scope="tags">
-        <a-tag
-            v-for="tag in tags"
-            :key="tag"
-            :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-        >
-            {{ tag.toUpperCase() }}
-        </a-tag>
-        </span>
-        <span slot="action" slot-scope="text, record">
-        <a>Invite 一 {{ record.name }}</a>
-        <a-divider type="vertical" />
-        <a>Delete</a>
-        <a-divider type="vertical" />
-        <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
-    </span>
-  </a-table>
+        <a-table :columns="columns" :data-source="employees" bordered>
+        <a slot="fullname" slot-scope="text">{{ text }}</a>
+        <a-tag key="gender" slot="gender" :color="text === 'Male' ? `geekblue` : `volcano`"  slot-scope="text">{{ text }}</a-tag>
+        <a slot="salary" slot-scope="text">{{ `${text}$` }}</a>
+        </a-table>
       </a-col>
     </a-row>
-
-  
 </template>
 <script>
+
 const columns = [
   {
-    dataIndex: 'name',
-    key: 'name',
-    slots: { title: 'customTitle' },
-    scopedSlots: { customRender: 'name' },
+    title: 'Full Name',
+    key: 'fullname',
+    dataIndex: 'fullname',
+    scopedSlots: { customRender: 'fullname' },
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    title: 'Gender',
+    dataIndex: 'gender',
+    key: 'gender',
+    scopedSlots: { customRender: 'gender' },
   },
   {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    scopedSlots: { customRender: 'tags' },
+    title: 'Contacts',
+    dataIndex: 'contacts',
+    key: 'contacts',
   },
   {
-    title: 'Action',
-    key: 'action',
-    scopedSlots: { customRender: 'action' },
-  },
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
+    title: 'Joining date',
+    dataIndex: 'joining_date',
+    key: 'joining_date',
   },
   {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
+    title: 'Salary',
+    dataIndex: 'salary',
+    key: 'salary',
+    scopedSlots: { customRender: 'salary' },
   },
   {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
+    title: 'Position',
+    dataIndex: 'position',
+    key: 'position',
+  }
 ];
 
 export default {
   data() {
     return {
-      data,
       columns,
+      employees: []
     };
+  },
+  async fetch(){
+      const response = await this.$prismic.api.query(
+            this.$prismic.predicates.at("document.type", "employee"),
+            { orderings : '[my.employee.joining_date desc]' }
+        );
+
+        if(response && response.results && response.results.length !== 0){
+            const results = response.results.map(e => ({
+                ...e.data,
+                fullname: this.$prismic.asText(e.data.fullname),
+                contacts: this.$prismic.asText(e.data.contacts)
+            }));
+
+            this.employees = results;
+        }
   },
 };
 </script>
