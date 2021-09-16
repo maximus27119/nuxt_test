@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
 export default {
   methods: {
     getComponentName(compName){
@@ -13,8 +14,10 @@ export default {
   },
   async asyncData({ $prismic, error }) {
     const response = await $prismic.api.getSingle("home_page");
+    // console.log('DATA: ', response)
 
     const result = Object.values(response.data)
+    // result.forEach(e => console.log(e));
     if (result){
       return { 
         components: result.filter(e => e.id)

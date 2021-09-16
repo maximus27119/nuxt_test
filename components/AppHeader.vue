@@ -22,6 +22,8 @@ export default {
   },
   async fetch(){
     const result = await this.$prismic.api.getSingle('header');
+
+    // console.log('DATA2: ', result)
     
     if(!result)
       return;

@@ -9,7 +9,11 @@
       </a-col>
     </a-row>
 </template>
+
 <script>
+import Prismic from '@prismicio/client';
+
+const api = Prismic.client("http://kozaktest.cdn.prismic.io/api")
 
 const columns = [
   {
@@ -55,19 +59,61 @@ export default {
     };
   },
   async fetch(){
-      const response = await this.$prismic.api.query(
-            this.$prismic.predicates.at("document.type", "employee"),
-            { orderings : '[my.employee.joining_date desc]' }
-        );
+      // const response = await this.$prismic.api.query(
+      //       this.$prismic.predicates.at("document.type", "employee"),
+            // { orderings : '[my.employee.joining_date desc]', fetchLinks: 'employee' }
+        // );
+      // const response2 = await this.$prismic.api.getSingle('content', { fetchLinks: 'employee' });
 
-        if(response && response.results && response.results.length !== 0){
-            const results = response.results.map(e => ({
-                ...e.data,
-                fullname: this.$prismic.asText(e.data.fullname),
-                contacts: this.$prismic.asText(e.data.contacts)
-            }));
-            this.employees = results;
-        }
+    try{
+      const response = await api.query(Prismic.Predicates.at('document.type', 'content'), { fetchLinks: ['employee.fullname','employee.gender','employee.contacts','employee.joining_date', 'employee.salary', 'employee.position'] });
+
+      // const response = await api.getByUID('content', 'content', {fetchLinks: 'employee.gender'});
+
+      console.log(response.results[0].data.content);
+
+      // Object.values(response.data).forEach(e => console.log(e));
+      // response.results[0].data.content.employees_table.value.forEach(e => {
+      //   console.log(e);
+      // });
+      // console.log();
+      // console.log(response.results[0].data.content.employees_table.value.forEach(e => {
+      //   console.log(api.as, e);
+      // }));
+
+    //   const mySuperGraphQuery = `{
+    //     content{
+    //       data
+    //     }
+    //   }`
+
+    //   const result = await api.getSingle('content',
+    //     { 'graphQuery': mySuperGraphQuery }
+    //   );
+
+    //   console.log(result);
+      return {
+        components: []
+      }
+    }catch(e){
+      console.log("Error: ", e);
+    }
+
+        // console.log("DATA CONTENT: ", response);
+        // response.data.forEach(e => console.log(e))
+
+        // console.log("DATA CONTENT2: ");
+        // console.log(response2.data.test111);
+        // response2.data.test111.forEach(e => console.log(e.test.data))
+
+        // if(response && response.results && response.results.length !== 0){
+        //     const results = response.results.map(e => ({
+        //         ...e.data,
+        //         fullname: this.$prismic.asText(e.data.fullname),
+        //         contacts: this.$prismic.asText(e.data.contacts)
+        //     }));
+        //     this.employees = results;
+        // }
   },
 };
 </script>
