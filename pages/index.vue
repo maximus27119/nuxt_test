@@ -1,6 +1,6 @@
 <template>
   <a-layout class="app">
-    <component v-for="component of components" :is="getComponentName(component.type)" :key="component.type" :id="component.id"/>
+    <component v-for="component of components" :is="getComponentName(component.type)" :key="component.id" :id="component.id"/>
   </a-layout>
 </template>
 
@@ -8,7 +8,6 @@
 export default {
   methods: {
     getComponentName(compName){
-      // console.log(this.components);
       return `app-${compName}`.toLowerCase();
     }
   },
@@ -16,13 +15,11 @@ export default {
     const response = await $prismic.api.getSingle("home_page");
 
     const result = Object.values(response.data)
-    // console.log(result);
     if (result){
       return { 
         components: result.filter(e => e.id)
       }
     }else{
-      console.log("error");
       error({ statusCode: 404, message: 'Page not found' })
     }
   },

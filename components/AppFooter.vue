@@ -20,6 +20,9 @@ export default {
 
         const response = await this.$prismic.api.getSingle("footer");
 
+        if(!response)
+            return;
+
         this.title = this.$prismic.asText(response.data.footer_title)
     }
 }

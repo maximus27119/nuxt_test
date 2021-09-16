@@ -6,15 +6,7 @@
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
       >
-        <a-menu-item key="1">
-          nav 1
-        </a-menu-item>
-        <a-menu-item key="2">
-          nav 2
-        </a-menu-item>
-        <a-menu-item key="3">
-          nav 3
-        </a-menu-item>
+        <a-menu-item v-for="item in menuItems" :key="item.label">{{item.label}}</a-menu-item>
       </a-menu>
     </a-layout-header>
 </template>
@@ -30,8 +22,15 @@ export default {
   },
   async fetch(){
     const result = await this.$prismic.api.getSingle('header');
-    console.log(result.data);
+    
+    if(!result)
+      return;
     this.logoUrl = result.data.logo.url;
+    result.data.menu_links.forEach(e => {
+      this.menuItems.push({
+        label: this.$prismic.asText(e.label)
+      })
+    });
   }
 }
 </script>

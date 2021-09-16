@@ -66,7 +66,6 @@ export default {
                 fullname: this.$prismic.asText(e.data.fullname),
                 contacts: this.$prismic.asText(e.data.contacts)
             }));
-
             this.employees = results;
         }
   },
