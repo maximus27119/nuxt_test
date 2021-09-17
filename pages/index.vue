@@ -1,36 +1,38 @@
 <template>
   <a-layout class="app">
-    <component v-for="component of components" :is="getComponentName(component.type)" :key="component.id" :id="component.id"/>
+    <component
+      v-for="component of components"
+      :is="getComponentName(component.type)"
+      :key="component.id"
+    />
   </a-layout>
 </template>
 
 <script>
-
 export default {
   methods: {
-    getComponentName(compName){
+    getComponentName(compName) {
       return `app-${compName}`.toLowerCase();
     }
   },
   async asyncData({ $prismic, error }) {
     const response = await $prismic.api.getSingle("home_page");
-    // console.log('DATA: ', response)
-
-    const result = Object.values(response.data)
-    // result.forEach(e => console.log(e));
-    if (result){
-      return { 
+    
+    const result = Object.values(response.data);
+    
+    if (result) {
+      return {
         components: result.filter(e => e.id)
-      }
-    }else{
-      error({ statusCode: 404, message: 'Page not found' })
+      };
+    } else {
+      error({ statusCode: 404, message: "Page not found" });
     }
-  },
-}
+  }
+};
 </script>
 
 <style scoped>
-  .app{
-    min-height: 100vh;
-  }
+.app {
+  min-height: 100vh;
+}
 </style>

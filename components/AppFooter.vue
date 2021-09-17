@@ -1,40 +1,36 @@
 <template>
-    <a-layout-footer class="footer">
-        {{title}}
-    </a-layout-footer>
+  <a-layout-footer class="footer">
+    {{ title }}
+  </a-layout-footer>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            title: ""
-        }
-    },
-    props: {
-        id: null
-    },
-    async fetch(){
-        if(!this.id)
-            return;
+  data() {
+    return {
+      title: ""
+    };
+  },
+  props: {
+    id: null
+  },
+  async fetch() {
+    const response = await this.$prismic.api.getSingle("footer");
 
-        const response = await this.$prismic.api.getSingle("footer");
+    if (!response) return;
 
-        if(!response)
-            return;
-
-        this.title = this.$prismic.asText(response.data.footer_title)
-    }
-}
+    this.title = this.$prismic.asText(response.data.footer_title);
+  }
+};
 </script>
 
 <style>
 .footer {
-   position:absolute;
-   bottom:0;
-   width:100%;
-   height:70px;   /* Height of the footer */
-   /* background:#6cf; */
-   text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  /* background:#6cf; */
+  text-align: center;
 }
 </style>
